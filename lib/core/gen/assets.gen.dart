@@ -89,6 +89,10 @@ class $AssetsImagesGen {
   /// Directory path: assets/images/intro
   $AssetsImagesIntroGen get intro => const $AssetsImagesIntroGen();
 
+  /// File path: assets/images/quran-svg_ icn.svg
+  SvgGenImage get quranSvgIcn =>
+      const SvgGenImage('assets/images/quran-svg_ icn.svg');
+
   /// File path: assets/images/quran_background.png
   AssetGenImage get quranBackground =>
       const AssetGenImage('assets/images/quran_background.png');
@@ -106,9 +110,10 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/time_background.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
+  List<dynamic> get values => [
     hadithBackground,
     headerLogo,
+    quranSvgIcn,
     quranBackground,
     radioBackground,
     sebhaBackground,
