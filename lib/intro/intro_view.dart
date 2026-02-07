@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:islami_app/splash/HomeView.dart';
 
 class IntroView extends StatefulWidget {
+  static const String routeName = '/intro';
   const IntroView({super.key});
 
   @override
@@ -70,10 +71,12 @@ class _IntroViewState extends State<IntroView> {
             child: TextButton(
               onPressed: () {
                 if (currentIndex == images.length - 1) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const HomeView()),
-                  );
+                  Navigator.pushReplacementNamed(context, HomeView.routeName);
+
+                  // Navigator.pushReplacement(
+                  //   context,
+                  //   MaterialPageRoute(builder: (_) => const HomeView()),
+                  // );
                 } else {
                   _controller.nextPage(
                     duration: const Duration(milliseconds: 300),

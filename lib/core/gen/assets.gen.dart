@@ -14,8 +14,23 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart' as _svg;
 import 'package:vector_graphics/vector_graphics.dart' as _vg;
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/ArbFONTS-Janna-LT-Regular.ttf
+  String get arbFONTSJannaLTRegular =>
+      'assets/fonts/ArbFONTS-Janna-LT-Regular.ttf';
+
+  /// List of all assets
+  List<String> get values => [arbFONTSJannaLTRegular];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
+
+  /// File path: assets/icons/Sura_Number.png
+  AssetGenImage get suraNumber =>
+      const AssetGenImage('assets/icons/Sura_Number.png');
 
   /// File path: assets/icons/hadith_active_icn.svg
   SvgGenImage get hadithActiveIcn =>
@@ -58,7 +73,8 @@ class $AssetsIconsGen {
       const SvgGenImage('assets/icons/time_in_active_icn.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [
+  List<dynamic> get values => [
+    suraNumber,
     hadithActiveIcn,
     hadithInActiveIcn,
     quranActiveIcn,
@@ -85,6 +101,22 @@ class $AssetsImagesGen {
   /// File path: assets/images/header_logo.png
   AssetGenImage get headerLogo =>
       const AssetGenImage('assets/images/header_logo.png');
+
+  /// File path: assets/images/img_bottom_decoration.png
+  AssetGenImage get imgBottomDecoration =>
+      const AssetGenImage('assets/images/img_bottom_decoration.png');
+
+  /// File path: assets/images/img_left_corner.png
+  AssetGenImage get imgLeftCorner =>
+      const AssetGenImage('assets/images/img_left_corner.png');
+
+  /// File path: assets/images/img_most_recent.png
+  AssetGenImage get imgMostRecent =>
+      const AssetGenImage('assets/images/img_most_recent.png');
+
+  /// File path: assets/images/img_right_corner.png
+  AssetGenImage get imgRightCorner =>
+      const AssetGenImage('assets/images/img_right_corner.png');
 
   /// Directory path: assets/images/intro
   $AssetsImagesIntroGen get intro => const $AssetsImagesIntroGen();
@@ -113,6 +145,10 @@ class $AssetsImagesGen {
   List<dynamic> get values => [
     hadithBackground,
     headerLogo,
+    imgBottomDecoration,
+    imgLeftCorner,
+    imgMostRecent,
+    imgRightCorner,
     quranSvgIcn,
     quranBackground,
     radioBackground,
@@ -172,6 +208,7 @@ class $AssetsImagesIntroGen {
 class Assets {
   const Assets._();
 
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
