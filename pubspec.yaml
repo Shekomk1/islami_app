@@ -13,6 +13,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.2.3
   flutter_bounceable: ^1.2.0
+  carousel_slider: ^5.1.2
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   build_runner:
@@ -55,7 +57,8 @@ flutter:
     - assets/icons/
     - assets/fonts/
     - assets/images/
-    - assets/files/
+    - assets/files/quran/
+    - assets/files/hadith/
     - assets/images/intro/
     - assets/images/Splash/
 

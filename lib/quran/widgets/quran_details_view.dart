@@ -27,7 +27,7 @@ class _QuranDetailsViewState extends State<QuranDetailsView> {
 
   Future<void> _loadQuranText(String suraNumber) async {
     String quranText = await rootBundle.loadString(
-      "assets/files/$suraNumber.txt",
+      "assets/files/quran/$suraNumber.txt",
     );
     setState(() {
       verses = quranText.trim().split("\n");
