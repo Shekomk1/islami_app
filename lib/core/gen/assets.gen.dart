@@ -108,9 +108,21 @@ class $AssetsImagesGen {
   /// Directory path: assets/images/Splash
   $AssetsImagesSplashGen get splash => const $AssetsImagesSplashGen();
 
+  /// File path: assets/images/body_sebha.png
+  AssetGenImage get bodySebha =>
+      const AssetGenImage('assets/images/body_sebha.png');
+
+  /// File path: assets/images/evening_img.png
+  AssetGenImage get eveningImg =>
+      const AssetGenImage('assets/images/evening_img.png');
+
   /// File path: assets/images/hadith_background.png
   AssetGenImage get hadithBackground =>
       const AssetGenImage('assets/images/hadith_background.png');
+
+  /// File path: assets/images/head_sebha.png
+  AssetGenImage get headSebha =>
+      const AssetGenImage('assets/images/head_sebha.png');
 
   /// File path: assets/images/header_logo.png
   AssetGenImage get headerLogo =>
@@ -135,6 +147,10 @@ class $AssetsImagesGen {
   /// Directory path: assets/images/intro
   $AssetsImagesIntroGen get intro => const $AssetsImagesIntroGen();
 
+  /// File path: assets/images/morning_img.png
+  AssetGenImage get morningImg =>
+      const AssetGenImage('assets/images/morning_img.png');
+
   /// File path: assets/images/quran-svg_ icn.svg
   SvgGenImage get quranSvgIcn =>
       const SvgGenImage('assets/images/quran-svg_ icn.svg');
@@ -151,6 +167,10 @@ class $AssetsImagesGen {
   AssetGenImage get sebhaBackground =>
       const AssetGenImage('assets/images/sebha_background.png');
 
+  /// File path: assets/images/sound-waves.png
+  AssetGenImage get soundWaves =>
+      const AssetGenImage('assets/images/sound-waves.png');
+
   /// File path: assets/images/time_background.png
   AssetGenImage get timeBackground =>
       const AssetGenImage('assets/images/time_background.png');
@@ -158,16 +178,21 @@ class $AssetsImagesGen {
   /// List of all assets
   List<dynamic> get values => [
     hadithCardBackGround1,
+    bodySebha,
+    eveningImg,
     hadithBackground,
+    headSebha,
     headerLogo,
     imgBottomDecoration,
     imgLeftCorner,
     imgMostRecent,
     imgRightCorner,
+    morningImg,
     quranSvgIcn,
     quranBackground,
     radioBackground,
     sebhaBackground,
+    soundWaves,
     timeBackground,
   ];
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/extension/padding_extension.dart';
 import 'package:islami_app/core/gen/assets.gen.dart';
@@ -5,6 +7,7 @@ import 'package:islami_app/core/theme/color_pallet.dart';
 import 'package:islami_app/models/sura_data.dart';
 import 'package:islami_app/quran/widgets/SuraCardWidgets.dart';
 import 'package:islami_app/quran/widgets/quran_details_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuranView extends StatefulWidget {
   QuranView({super.key});
@@ -14,17 +17,11 @@ class QuranView extends StatefulWidget {
 }
 
 class _QuranViewState extends State<QuranView> {
-  List<SuraData>suraList = [
+  List<SuraData> suraList = [];
+  List<SuraData> filterSuraList = [];
+  List<SuraData> recentSuras = [];
 
-    // SuraData(
-    //     suraNumber: "1",
-    //     suraNameAR: "الفاتحه",
-    //     suraNameEN: "Al-Fatiha",
-    //     suraVersesCount: '7')
-
-  ];
-
-  List<String> arabicAuranSuras = [
+  final List<String> arabicAuranSuras = [
     "الفاتحه",
     "البقرة",
     "آل عمران",
@@ -140,8 +137,7 @@ class _QuranViewState extends State<QuranView> {
     "الفلق",
     "الناس"
   ];
-
-  List<String> englishQuranSurahs = [
+  final List<String> englishQuranSurahs = [
     "Al-Fatiha",
     "Al-Baqarah",
     "Aal-E-Imran",
@@ -257,8 +253,7 @@ class _QuranViewState extends State<QuranView> {
     "Al-Falaq",
     "An-Nas"
   ];
-
-  List<String> AyaNumber = [
+  final List<String> ayaNumber = [
     '7',
     '286',
     '200',
@@ -377,16 +372,53 @@ class _QuranViewState extends State<QuranView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     suraList = List.generate(arabicAuranSuras.length, (index) =>
         SuraData(
           suraNumber: "${index + 1}",
           suraNameAR: arabicAuranSuras[index],
           suraNameEN: englishQuranSurahs[index],
-          suraVersesCount: AyaNumber[index],
+          suraVersesCount: ayaNumber[index],
         ),
     );
+    filterSuraList = suraList;
+    _loadRecentSuras();
+  }
+
+  Future<void> _loadRecentSuras() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? recentJson = prefs.getString('recent_suras');
+    if (recentJson != null) {
+      List<dynamic> decoded = jsonDecode(recentJson);
+      setState(() {
+        recentSuras = decoded.map((e) => SuraData.fromJson(e)).toList();
+
+        if (recentSuras.length > 5) {
+          recentSuras = recentSuras.sublist(0, 5);
+        }
+      });
+    }
+  }
+
+  Future<void> _saveRecentSura(SuraData sura) async {
+    final prefs = await SharedPreferences.getInstance();
+    recentSuras.removeWhere((element) => element.suraNumber == sura.suraNumber);
+    recentSuras.insert(0, sura);
+    if (recentSuras.length > 5) {
+      recentSuras.removeLast();
+    }
+    await prefs.setString('recent_suras',
+        jsonEncode(recentSuras.map((e) => e.toJson()).toList()));
+    setState(() {});
+  }
+
+  void _onSearch(String query) {
+    setState(() {
+      filterSuraList = suraList.where((sura) {
+        return sura.suraNameAR.contains(query) ||
+            sura.suraNameEN.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+    });
   }
 
   @override
@@ -402,7 +434,7 @@ class _QuranViewState extends State<QuranView> {
         ),
       ),
       child: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: Column(
           spacing: 10,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -413,130 +445,148 @@ class _QuranViewState extends State<QuranView> {
               child: Assets.images.headerLogo.image(),
             ),
             TextField(
+              onChanged: _onSearch,
               cursorColor: ColorPallete.primaryColor,
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Sura Name',
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: ColorPallete.generalTextColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: ColorPallete.primaryColor),
+                  borderSide: const BorderSide(
+                      color: ColorPallete.primaryColor),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: ColorPallete.primaryColor),
+                  borderSide: const BorderSide(
+                      color: ColorPallete.primaryColor),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: ColorPallete.primaryColor),
+                  borderSide: const BorderSide(
+                      color: ColorPallete.primaryColor, width: 2),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                prefixIcon: Assets.icons.quranActiveIcn
-                    .svg(
-                  colorFilter: ColorFilter.mode(
-                    ColorPallete.primaryColor,
-                    BlendMode.srcIn,
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Assets.icons.quranActiveIcn.svg(
+                    colorFilter: const ColorFilter.mode(
+                      ColorPallete.primaryColor,
+                      BlendMode.srcIn,
+                    ),
                   ),
-                )
-                    .setHorizontalPaddingOnWidget(12),
+                ),
               ),
             ).setHorizontalPaddingOnWidget(20),
-            Text("Most Recently ",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .titleMedium
-            ).setHorizontalPaddingOnWidget(20),
-            SizedBox(
-              height: 160,
-              child: ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: ColorPallete.primaryColor,
-                      ),
-                      child: Row(
-                        spacing: 10,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                  "Al-Anbiya",
-                                  style: theme.textTheme.headlineSmall
-                                      ?.copyWith(
-                                      color: Colors.black
-                                  )
-                              ),
-                              Text(
-                                  "الأنبياء",
-                                  style: theme.textTheme.headlineSmall
-                                      ?.copyWith(
-                                      color: Colors.black
-                                  )
-                              ),
-                              Text(
-                                  "112 Verses  ",
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                      color: Colors.black
-                                  )
-                              ),
-                            ],
+            if (recentSuras.isNotEmpty &&
+                filterSuraList.length == suraList.length) ...[
+              Text("Most Recently ",
+                  style: theme.textTheme.titleMedium?.copyWith(
+                      color: Colors.white)
+              ).setHorizontalPaddingOnWidget(20),
+              SizedBox(
+                height: 160,
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: recentSuras.length,
+                  itemBuilder: (context, index) {
+                    final sura = recentSuras[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          QuranDetailsView.routName,
+                          arguments: sura,
+                        );
+                      },
+                      child: Container(
+                          width: 280,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: ColorPallete.primaryColor,
                           ),
-                          Assets.images.imgMostRecent.image(),
-                        ],
-
-                      )
-
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox(width: 10);
-                },
+                          child: Row(
+                            spacing: 10,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        sura.suraNameEN,
+                                        style: theme.textTheme.headlineSmall
+                                            ?.copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold
+                                        )
+                                    ),
+                                    Text(
+                                        sura.suraNameAR,
+                                        style: theme.textTheme.headlineSmall
+                                            ?.copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold
+                                        )
+                                    ),
+                                    Text(
+                                        "${sura.suraVersesCount} Verses",
+                                        style: theme.textTheme.bodyMedium
+                                            ?.copyWith(color: Colors.black)
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Assets.images.imgMostRecent.image(),
+                            ],
+                          )
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) =>
+                  const SizedBox(width: 15),
+                ),
               ),
-            ),
+            ],
             Text("Suras List",
-                style: theme.textTheme.titleMedium
+                style: theme.textTheme.titleMedium?.copyWith(
+                    color: Colors.white)
             ).setHorizontalPaddingOnWidget(20),
             ListView.separated(
               shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               padding: EdgeInsets.zero,
-
-              itemCount: suraList.length,
-
+              itemCount: filterSuraList.length,
               itemBuilder: (context, index) {
                 return Suracardwidgets(
-                  suraData: suraList[index], onTap: () {
-                  Navigator.of(context).pushNamed(
-                    QuranDetailsView.routName,
-                    arguments: suraList[index],
-                  );
-                },
+                  suraData: filterSuraList[index],
+                  onTap: () {
+                    _saveRecentSura(filterSuraList[index]);
+                    Navigator.of(context).pushNamed(
+                      QuranDetailsView.routName,
+                      arguments: filterSuraList[index],
+                    );
+                  },
                 );
               },
               separatorBuilder: (context, index) {
                 return const Divider(
-                    thickness: 2,
+                    color: Colors.white24,
+                    thickness: 1,
                     indent: 40,
                     endIndent: 40,
-                    height: 40
+                    height: 30
                 );
               },
-
             ),
-
           ],
         ),
       ),
-
     );
   }
 }
