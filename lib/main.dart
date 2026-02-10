@@ -24,8 +24,6 @@ class MyApp extends StatelessWidget {
         HomeView.routeName: (context) => HomeView(),
         QuranDetailsView.routName: (context) => QuranDetailsView(),
       },
-
-      // home: SplashView(),
     );
   }
 }

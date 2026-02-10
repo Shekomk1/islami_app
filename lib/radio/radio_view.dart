@@ -10,9 +10,8 @@ class RadioView extends StatefulWidget {
 }
 
 class _RadioViewState extends State<RadioView> {
-  int selectedIndex = 0; // 0 for Radio, 1 for Reciters
-  int playingIndex = 1; // Simulation: second item is playing
-
+  int selectedIndex = 0;
+  int playingIndex = 1;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -116,7 +115,6 @@ class _RadioViewState extends State<RadioView> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Background based on playing state
           Positioned(
             bottom: 0,
             left: 0,
@@ -138,7 +136,6 @@ class _RadioViewState extends State<RadioView> {
             ),
           ),
 
-          // Content
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

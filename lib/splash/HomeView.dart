@@ -47,7 +47,6 @@ class _HomeViewState extends State<HomeView> {
                 borderRadius: BorderRadius.circular(40),
               ),
               child: Assets.icons.quranActiveIcn.svg(width: 25, height: 25),
-              // child: SvgPicture.asset('assets/icons/quran_active_icn.svg')
             ),
             label: 'Quran',
           ),

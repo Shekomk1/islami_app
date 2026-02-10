@@ -72,11 +72,6 @@ class _IntroViewState extends State<IntroView> {
               onPressed: () {
                 if (currentIndex == images.length - 1) {
                   Navigator.pushReplacementNamed(context, HomeView.routeName);
-
-                  // Navigator.pushReplacement(
-                  //   context,
-                  //   MaterialPageRoute(builder: (_) => const HomeView()),
-                  // );
                 } else {
                   _controller.nextPage(
                     duration: const Duration(milliseconds: 300),

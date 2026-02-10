@@ -31,10 +31,6 @@ class _SplashViewState extends State<SplashView> {
         timer.cancel();
         Navigator.pushReplacementNamed(context, IntroView.routeName);
 
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (_) => const IntroView()),
-        // );
       }
     });
   }
