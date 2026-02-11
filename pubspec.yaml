@@ -59,5 +59,4 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/evening_img.png"
-  adaptive_icon_background: "transparent"
+  image_path: "assets/icons/praying.png"
