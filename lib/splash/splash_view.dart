@@ -2,6 +2,8 @@ import 'dart:async' show Timer;
 
 import 'package:flutter/material.dart';
 import 'package:islami_app/intro/intro_view.dart';
+import 'package:islami_app/splash/HomeView.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashView extends StatefulWidget {
   static const String routeName = '/splash';
@@ -29,10 +31,22 @@ class _SplashViewState extends State<SplashView> {
         setState(() => index++);
       } else {
         timer.cancel();
-        Navigator.pushReplacementNamed(context, IntroView.routeName);
-
+        _navigateToNext();
       }
     });
+  }
+
+  void _navigateToNext() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bool isFirstTime = prefs.getBool('is_first_time') ?? true;
+
+    if (mounted) {
+      if (isFirstTime) {
+        Navigator.pushReplacementNamed(context, IntroView.routeName);
+      } else {
+        Navigator.pushReplacementNamed(context, HomeView.routeName);
+      }
+    }
   }
 
   @override

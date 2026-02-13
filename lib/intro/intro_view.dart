@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/splash/HomeView.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroView extends StatefulWidget {
   static const String routeName = '/intro';
@@ -69,9 +70,13 @@ class _IntroViewState extends State<IntroView> {
             bottom: 30,
             right: 20,
             child: TextButton(
-              onPressed: () {
+              onPressed: () async {
                 if (currentIndex == images.length - 1) {
-                  Navigator.pushReplacementNamed(context, HomeView.routeName);
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('is_first_time', false);
+                  if (context.mounted) {
+                    Navigator.pushReplacementNamed(context, HomeView.routeName);
+                  }
                 } else {
                   _controller.nextPage(
                     duration: const Duration(milliseconds: 300),
